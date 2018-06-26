@@ -1,0 +1,1 @@
+-wto "8f6451d359dd4af3bb837bb37472316a" --debug "typical" --relax --mt "2" -L "xil_defaultlib" -L "secureip" -L "xpm" --snapshot "tb_FSMD_microphone_behav" "xil_defaultlib.tb_FSMD_microphone" -log "elaborate.log" 
