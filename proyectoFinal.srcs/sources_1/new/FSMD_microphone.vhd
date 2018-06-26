@@ -42,11 +42,12 @@ end FSMD_microphone;
 
 architecture Behavioral of FSMD_microphone is
 
-    type state_type is (S0, S1, S2, S3, S4);
+    type state_type is (S1, S2, S3, S4);
     
     signal state, next_state : state_type; 
     signal primer_ciclo      : std_logic:='0';
-    signal dato1, dato2      : std_logic_vector(sample_size-1 downto 0) := (others=>'0');
+    signal dato1      : std_logic_vector(sample_size-1 downto 0) := (others=>'0');
+    signal dato2      : std_logic_vector(sample_size-1 downto 0) := (others=>'0');
     signal cuenta            : std_logic_vector(8 downto 0) := (others=>'0');
     
     begin
@@ -57,7 +58,9 @@ architecture Behavioral of FSMD_microphone is
                 if (reset = '1') then                   
                     cuenta <= (others=>'0');
                     primer_ciclo <= '0';
-                    state <= S0;
+                    state <= S1;
+                    sample_out <= "00000000";
+                    --sample_out_ready <= '0';
                 else
                     cuenta <= std_logic_vector(unsigned(cuenta) + 1);
                     state <= next_state;
@@ -71,11 +74,11 @@ architecture Behavioral of FSMD_microphone is
     OUTPUT_DECODE : process (state, micro_data)    
         begin             
             case (state) is
-                when S0 =>
-                   sample_out_ready <= '0';
-                   dato1 <= (others=>'0');
-                   dato2 <= (others=>'0');
-                   sample_out <= "00000000";
+--                when S0 =>
+--                   sample_out_ready <= '0';
+--                   dato1 <= (others=>'0');
+--                   dato2 <= (others=>'0');
+--                   sample_out <= "00000000";
                    
                 when S1 =>
                    if(micro_data = '1') then
@@ -122,8 +125,8 @@ architecture Behavioral of FSMD_microphone is
     NEXT_STATE_DECODE : process (state, cuenta)
     begin    
         case (state) is
-            when S0 =>
-                next_state <= S1; 
+--            when S0 =>
+--                next_state <= S1; 
                              
             when S1 =>
                 if (unsigned(cuenta) < 106) then
@@ -153,7 +156,7 @@ architecture Behavioral of FSMD_microphone is
                    next_state <= S1;
                 end if;
             when others =>
-                next_state <= S0;
+                next_state <= S1;
         end case;
     end process;
 end Behavioral;

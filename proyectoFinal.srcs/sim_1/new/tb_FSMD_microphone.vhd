@@ -87,7 +87,7 @@ UUT_en_4: en_4_cycles PORT MAP (
 
 reset_p: process
      begin  
-        wait for 10ns; 
+        wait for 10us; 
         reset_s <= '0';
         micro_data_s <= '1';  
  end process;
